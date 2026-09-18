@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { ApplicationState, Evaluation, Gap, ResultCard } from './domain/types.ts';
+import type { ApplicationState, Evaluation, Gap } from './domain/types.ts';
 import {
   createInitialState,
   registerAISystem,
@@ -16,8 +16,9 @@ import { EvaluationPanel } from './components/EvaluationPanel.tsx';
 import { M05GapPanel } from './components/M05GapPanel.tsx';
 import { M06ResultPanel } from './components/M06ResultPanel.tsx';
 import { StatusBadge } from './components/StatusBadge.tsx';
+import { ValidationDashboard } from './components/ValidationDashboard.tsx';
 
-type ActiveModule = 'overview' | 'm02' | 'm04' | 'evaluation' | 'm05' | 'm06';
+type ActiveModule = 'overview' | 'm02' | 'm04' | 'evaluation' | 'm05' | 'm06' | 'validation';
 
 export default function App() {
   const [state, setState] = useState<ApplicationState>(createInitialState);
@@ -159,6 +160,7 @@ export default function App() {
               { id: 'evaluation' as const, label: 'Evaluation', module: 'M04→Eval' },
               { id: 'm05' as const, label: 'M05 — Gap → Action', module: 'M05' },
               { id: 'm06' as const, label: 'M06 — Result', module: 'M06' },
+              { id: 'validation' as const, label: 'QA Validation', module: 'QA' },
             ].map((item) => (
               <button
                 key={item.id}
@@ -240,6 +242,9 @@ export default function App() {
             currentResultCards={currentResultCards}
             onGenerate={handleGenerateResult}
           />
+        )}
+        {activeModule === 'validation' && (
+          <ValidationDashboard />
         )}
       </main>
 
